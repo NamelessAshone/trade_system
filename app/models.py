@@ -63,6 +63,9 @@ class User(UserMixin, db.Model):
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
     avatar_hash = db.Column(db.String(32))
 
+    tel = db.Column(db.String(14))
+    bank_account = db.Column(db.String(19))
+
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
         if self.role is None:
@@ -77,7 +80,9 @@ class User(UserMixin, db.Model):
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute')
-
+    
+    # usage: user_admin.password = '123456'
+    #        ->user_admin.password_hash = user_admin.password('123456') 
     @password.setter
     def password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -86,6 +91,7 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def generate_confirmation_token(self, expiration=3600):
+        # attr 'expiration' to specify the time of this token living
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
         return s.dumps({'confirm': self.id})
 
@@ -164,6 +170,18 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User %r>' % self.username
 
+class Goods(db.Model):
+    __tablename__ = 'goods'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), index=True)
+    price = db.Column(db.Integer)
+    amount = db.Column(db.Integer)
+    text = db.Column(db.String(200))
+    picture_path = db.Column(db.String(200))
+    _class = db.Column(db.String(40))
+
+    def __repr__(self):
+        return '<Goods %r>' % self.name
 
 class AnonymousUser(AnonymousUserMixin):
     def can(self, permissions):
@@ -173,7 +191,6 @@ class AnonymousUser(AnonymousUserMixin):
         return False
 
 login_manager.anonymous_user = AnonymousUser
-
 
 @login_manager.user_loader
 def load_user(user_id):

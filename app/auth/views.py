@@ -8,7 +8,11 @@ from ..email import send_email
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm,\
     PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
 
-
+# the diff between func 'before_app_request'  and func 'before_request':
+# -> func 'before_app_request' s executed before each request, even if outside 
+#    of a blueprint.
+# -> func 'before_request' is only executed before each request that is handled 
+#    by a function of that blueprint.
 @auth.before_app_request
 def before_request():
     if current_user.is_authenticated:
