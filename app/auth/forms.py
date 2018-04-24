@@ -78,3 +78,16 @@ class ChangeEmailForm(FlaskForm):
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
             raise ValidationError('Email already registered.')
+
+
+class ChangeUserIf(FlaskForm):
+    tel = StringField('Tel', validators=[
+        Required(), Regexp('^(?:^1[3456789]|^9[28])\d{9}$',
+                           0,
+                           'Bad telephone number, please try again.')])
+    bank_account = StringField('Bank account', validators=[
+        Required(), Regexp('^([\d]{4})([\d]{4})([\d]{4})([\d]{4})([\d]{0,})?$',
+                           0,
+                           'Bad bank account, please try again.')])
+    submit = SubmitField('commit')
+

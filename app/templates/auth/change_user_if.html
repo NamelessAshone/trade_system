@@ -5,9 +5,13 @@
 
 {% block page_content %}
 <div class="page-header">
-    <h1>Change Your Email Address</h1>
+    <h1>Change Your Information</h1>
 </div>
 <div class="col-md-4">
     {{ wtf.quick_form(form) }}
+    <form method="POST" action="/login">
+    <div>{{ form.tel.label }}: {{ form.tel(value=tel) }}</div>
+    <div>{{ form.bank_account.label }}: {{ form.bank_account() }}</div>
+</form>
 </div>
 {% endblock %}

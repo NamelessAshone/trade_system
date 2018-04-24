@@ -62,9 +62,11 @@ class User(UserMixin, db.Model):
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
     avatar_hash = db.Column(db.String(32))
-
+    # Columns add by Trade System
     tel = db.Column(db.String(14))
     bank_account = db.Column(db.String(19))
+
+    putaway_logs = db.relationship('Putaway_log', backref='user', lazy='dynamic')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -80,7 +82,15 @@ class User(UserMixin, db.Model):
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute')
-    
+
+    @property
+    def _tel(self):
+        return self.tel
+
+    @property
+    def _bank_account(self):
+        return self.bank_account
+
     # usage: user_admin.password = '123456'
     #        ->user_admin.password_hash = user_admin.password('123456') 
     @password.setter
@@ -170,6 +180,13 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User %r>' % self.username
 
+class Putaway_log(db.Model):
+    __tablename__ = 'putaway_log'
+    # id = db.Clolumn(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    good_id = db.Column(db.Integer, db.ForeignKey('goods.id'), primary_key=True)
+    date = db.Column(db.DateTime)
+
 class Goods(db.Model):
     __tablename__ = 'goods'
     id = db.Column(db.Integer, primary_key=True)
@@ -179,6 +196,7 @@ class Goods(db.Model):
     text = db.Column(db.String(200))
     picture_path = db.Column(db.String(200))
     _class = db.Column(db.String(40))
+    putaway_logs = db.relationship('Putaway_log', backref='good', lazy='dynamic')
 
     def __repr__(self):
         return '<Goods %r>' % self.name

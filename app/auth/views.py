@@ -6,7 +6,8 @@ from .. import db
 from ..models import User
 from ..email import send_email
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm,\
-    PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
+    PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm, \
+    ChangeUserIf
 
 # the diff between func 'before_app_request'  and func 'before_request':
 # -> func 'before_app_request' s executed before each request, even if outside 
@@ -57,7 +58,9 @@ def register():
     if form.validate_on_submit():
         user = User(email=form.email.data,
                     username=form.username.data,
-                    password=form.password.data)
+                    password=form.password.data,
+                    tel=form.tel.data,
+                    bank_account=form.bank_account.data)
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()
@@ -168,3 +171,13 @@ def change_email(token):
     else:
         flash('Invalid request.')
     return redirect(url_for('main.index'))
+
+@auth.route('/change-user-if', methods=['GET', 'POST'])
+@login_required
+def change_user_if():
+    form = ChangeUserIf()
+    form.tel(content=current_user.tel)
+    form.bank_account(value=current_user.bank_account)
+    if form.validate_on_submit():
+        pass
+    return render_template('auth/change_user_if.html', form=form, tel=current_user.tel)
