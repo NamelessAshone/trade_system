@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {{ super() }}
+     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='goods_base.css') }}">
+{% endblock %}
+{% block title %}{{ super() }} - Home{% endblock %}
+
+{% block page_content %}
+    {{ super() }}
+
+    <div class="row placeholders">
+        <div class="col-md-2 sidebar">
+            <ul class="nav nav-pills nav-stacked">
+                <li>
+                    <a href="{{ url_for('goods.home') }}">商品<span class="sr-only">(current)</span></a>
+                </li>
+                <li><a href="{{ url_for('goods.add_new_good') }}">上架新商品</a></li>
+                <li><a href="#">我上架的商品</a></li>
+                <li><a href="#">我收到的订单</a></li>
+                <li><a href="#">统计</a></li>
+            </ul>
+        </div>
+        <div class="col-md-10 col-md-offset-2 main">
+            {% block main_div_content %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}

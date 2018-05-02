@@ -80,14 +80,13 @@ class ChangeEmailForm(FlaskForm):
             raise ValidationError('Email already registered.')
 
 
-class ChangeUserIf(FlaskForm):
-    tel = StringField('Tel', validators=[
+class ChangeUserInfo(FlaskForm):
+    tel = StringField('New tel', validators=[
         Required(), Regexp('^(?:^1[3456789]|^9[28])\d{9}$',
                            0,
                            'Bad telephone number, please try again.')])
-    bank_account = StringField('Bank account', validators=[
+    bank_account = StringField('New bank account', validators=[
         Required(), Regexp('^([\d]{4})([\d]{4})([\d]{4})([\d]{4})([\d]{0,})?$',
                            0,
                            'Bad bank account, please try again.')])
     submit = SubmitField('commit')
-

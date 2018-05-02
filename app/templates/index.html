@@ -3,7 +3,14 @@
 {% block title %}{{ super() }}{% endblock %}
 
 {% block page_content %}
-<div class="page-header">
-    <h1>Hello, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h1>
-</div>
+    <div class="jumbotron">
+        <h1>Hello, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h1>
+        <p>Welcome to TradeSystem! You can sell or buy items on this web site.</p>
+        <p><a class="btn btn-primary btn-lg" href="
+                {% if current_user.is_authenticated %}
+                    {{ url_for('goods.home') }}
+                {% else %}
+                {{ url_for('auth.register') }}
+                {% endif %}" role="button">Learn more</a></p>
+    </div>
 {% endblock %}

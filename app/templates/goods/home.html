@@ -1,53 +1,29 @@
-{% extends "base.html" %}
+{% extends "goods/base.html" %}
 
-{% block title %}{{ super() }} - Home{% endblock %}
+{% block main_div_content %}
+    {# TODO : add a search button #}
+    <h1 class="page-header">Dashboard</h1>
 
-{% block page_content %}
-{{ super() }}
-
-<div class="row placeholders">
-    <div class="col-md-2 sidebar">
-        <ul class="nav nav-sidebar">
-            <li class="active">
-                <a href="#">商品<span class="sr-only">(current)</span></a>
-            </li>
-            <li><a href="#">个人信息</a></li>
-            <li><a href="#">上架新商品</a></li>
-            <li><a href="#">我上架的商品</a></li>
-            <li><a href="#">我收到的订单</a></li>
-            <li><a href="#">统计</a></li>
-        </ul>
-    </div>
-
-    <div class="col-md-10 main">
-        <h1 class="page-header">Dashboard</h1>
-
-        <div class="row placeholders">
-            <div class="col-md-3 placeholder">
-                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-                <h4>Label</h4>
-                <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-md-3 placeholder">
-                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-                <h4>Label</h4>
-                <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-md-3 placeholder">
-                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-                <h4>Label</h4>
-                <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-md-3 placeholder">
-                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-                <h4>Label</h4>
-                <span class="text-muted">Something else</span>
-            </div>
+    <div class="row placeholders">
+        <div class="col-md-3 placeholder">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+            <h4>Label</h4>
+            <span class="text-muted">Something else</span>
         </div>
-
+        <div class="col-md-3 placeholder">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+            <h4>Label</h4>
+            <span class="text-muted">Something else</span>
+        </div>
+        <div class="col-md-3 placeholder">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+            <h4>Label</h4>
+            <span class="text-muted">Something else</span>
+        </div>
+        <div class="col-md-3 placeholder">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+            <h4>Label</h4>
+            <span class="text-muted">Something else</span>
+        </div>
     </div>
-
-</div>
-
-
 {% endblock %}

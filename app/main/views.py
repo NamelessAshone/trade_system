@@ -1,11 +1,12 @@
-from flask import render_template, redirect, url_for, abort, flash
+from flask import render_template, redirect, url_for, abort, flash, send_from_directory, \
+    current_app
 from flask_login import login_required, current_user
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm
 from .. import db
 from ..models import Role, User
 from ..decorators import admin_required
-
+import os
 
 @main.route('/')
 def index():
@@ -60,3 +61,10 @@ def edit_profile_admin(id):
     form.location.data = user.location
     form.about_me.data = user.about_me
     return render_template('edit_profile.html', form=form, user=user)
+
+'''
+@main.route('/css/<name>', methods=['GET'])
+def get_css(name):
+    css_path = os.path.join(current_app.config['WORK_PATH'],'app','templates','css')
+    return send_from_directory(css_path,name)
+'''

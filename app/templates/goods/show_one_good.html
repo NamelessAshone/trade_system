@@ -1,0 +1,16 @@
+{% extends "goods/base.html" %}
+
+{% block title %}{{ super() }} - Add new good{% endblock %}
+
+{% block main_div_content %}
+    <h1 class="page-header">Show one item</h1>
+    <div class="col-md-6 placeholder">
+        <img src="{{ good.photo_url }}" width="500" height="400" class="img-responsive" alt="Generic placeholder thumbnail">
+        <h2>{{ good.name }}</h2>
+        <span class="col-md-6 text-muted">{{ good.text }}</span>
+        <br>
+        <span class="col-md-6 text-danger text-right bg-success">{{ good.price }}</span>
+        <br>
+        <span class="col-md-6 text-muted text-right">{{ good.amount }}</span>
+    </div>
+{% endblock %}

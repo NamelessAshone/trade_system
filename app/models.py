@@ -187,14 +187,18 @@ class Putaway_log(db.Model):
     good_id = db.Column(db.Integer, db.ForeignKey('goods.id'), primary_key=True)
     date = db.Column(db.DateTime)
 
+    def __repr__(self):
+        return '<Goods %r>' % self.name
+
+
 class Goods(db.Model):
     __tablename__ = 'goods'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True)
-    price = db.Column(db.Integer)
+    price = db.Column(db.Float)
     amount = db.Column(db.Integer)
     text = db.Column(db.String(200))
-    picture_path = db.Column(db.String(200))
+    photo_path = db.Column(db.String(200))
     _class = db.Column(db.String(40))
     putaway_logs = db.relationship('Putaway_log', backref='good', lazy='dynamic')
 

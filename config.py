@@ -17,6 +17,11 @@ class Config:
     FLASKY_MAIL_SUBJECT_PREFIX = '[Flasky]'
     FLASKY_MAIL_SENDER = 'Flasky Admin <' + MAIL_USERNAME + '>'
     FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
+    BOOTSTRAP_SERVE_LOCAL = True
+    UPLOADED_PHOTOS_URL = 'http://localhost:5000/static/'
+    UPLOADED_PHOTOS_DEST = os.path.join(os.path.dirname(__file__),'app','static')
+    WORK_PATH = os.path.dirname(__file__)
+
     '''
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
