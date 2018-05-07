@@ -1,10 +1,19 @@
 from datetime import datetime
 import hashlib
+import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app, request
 from flask_login import UserMixin, AnonymousUserMixin
 from . import db, login_manager
+
+'''
+putaway_logs = db.Table(
+    'putaway_logs',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id',ondelete='CASCADE')),
+    db.Column('good_id', db.Integer, db.ForeignKey('goods.id',ondelete='CASCADE')),
+)
+'''
 
 
 class Permission:
@@ -66,7 +75,7 @@ class User(UserMixin, db.Model):
     tel = db.Column(db.String(14))
     bank_account = db.Column(db.String(19))
 
-    putaway_logs = db.relationship('Putaway_log', backref='user', lazy='dynamic')
+    my_goods = db.relationship('Good', backref='owner')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -158,7 +167,7 @@ class User(UserMixin, db.Model):
 
     def can(self, permissions):
         return self.role is not None and \
-            (self.role.permissions & permissions) == permissions
+               (self.role.permissions & permissions) == permissions
 
     def is_administrator(self):
         return self.can(Permission.ADMINISTER)
@@ -180,18 +189,8 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User %r>' % self.username
 
-class Putaway_log(db.Model):
-    __tablename__ = 'putaway_log'
-    # id = db.Clolumn(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
-    good_id = db.Column(db.Integer, db.ForeignKey('goods.id'), primary_key=True)
-    date = db.Column(db.DateTime)
 
-    def __repr__(self):
-        return '<Goods %r>' % self.name
-
-
-class Goods(db.Model):
+class Good(db.Model):
     __tablename__ = 'goods'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True)
@@ -199,11 +198,24 @@ class Goods(db.Model):
     amount = db.Column(db.Integer)
     text = db.Column(db.String(200))
     photo_path = db.Column(db.String(200))
+    photo_url = db.Column(db.String(200))
+    upload_date = db.Column(db.DateTime, default=datetime.utcnow)
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     _class = db.Column(db.String(40))
-    putaway_logs = db.relationship('Putaway_log', backref='good', lazy='dynamic')
 
     def __repr__(self):
-        return '<Goods %r>' % self.name
+        return '<Good %r>' % self.name
+
+    @property
+    def id_str(self):
+        return str(self.id)
+
+    def del_photo(self):
+        if os.path.exists(self.photo_path):
+            os.remove(self.photo_path)
+            print("The file with path '{}' dosen't exist".format(self.photo_path))
+        print('success remove {}'.format(self.photo_path))
+
 
 class AnonymousUser(AnonymousUserMixin):
     def can(self, permissions):
@@ -212,7 +224,9 @@ class AnonymousUser(AnonymousUserMixin):
     def is_administrator(self):
         return False
 
+
 login_manager.anonymous_user = AnonymousUser
+
 
 @login_manager.user_loader
 def load_user(user_id):

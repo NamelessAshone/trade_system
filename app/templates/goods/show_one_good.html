@@ -3,14 +3,98 @@
 {% block title %}{{ super() }} - Add new good{% endblock %}
 
 {% block main_div_content %}
-    <h1 class="page-header">Show one item</h1>
-    <div class="col-md-6 placeholder">
-        <img src="{{ good.photo_url }}" width="500" height="400" class="img-responsive" alt="Generic placeholder thumbnail">
-        <h2>{{ good.name }}</h2>
-        <span class="col-md-6 text-muted">{{ good.text }}</span>
-        <br>
-        <span class="col-md-6 text-danger text-right bg-success">{{ good.price }}</span>
-        <br>
-        <span class="col-md-6 text-muted text-right">{{ good.amount }}</span>
+    {{ super() }}
+    <ol class="breadcrumb">
+        <li><a href="{{ url_for(current_url[0]+".home") }}">{{ current_url[0] }}</a></li>
+        <li class="active">{{ current_url[1] }}</li>
+    </ol>
+    <div class="placeholder" style="height: 400px">
+        <div class="thumbnail" style="height: inherit">
+            <div class="row" style="height: inherit">
+                <div class="col-md-7" style="height: 98%">
+                    <div class="thumbnail" style="height: inherit">
+                        <img src="{{ good.photo_url }}"
+                             class="img-responsive" alt="Generic placeholder thumbnail" height="auto">
+                    </div>
+                </div>
+                <div class="col-md-5" style="height: 98%">
+                    <div class="thumbnail" style="height: inherit">
+                        <div class="panel panel-default" style="height: 60%">
+                            <div class="panel-heading">{{ good.name }}</div>
+                            <div class="panel-body">{{ good.text }}</div>
+                        </div>
+                        <ul class="list-group" style="height: 20%">
+                            <li class="list-group-item">
+                                ￥ <span class="badge">{{ good.price }}</span>
+                            </li>
+                            <li class="list-group-item">
+                                Amount <span class="badge">{{ good.amount }}</span>
+                            </li>
+                        </ul>
+                        {% if is_owner == True %}
+                            <button type="button" class="btn btn-primary btn-sm col-md-offset-8" data-toggle="modal"
+                                    data-target="{{ '#detail_of_good'+good.id_str }}">
+                                Update
+                            </button>
+                            <div class="modal fade" id="{{ 'detail_of_good'+good.id_str }}" tabindex="-1" role="dialog"
+                                 aria-labelledby="{{ '#detail_label_of_'+'good'+good.id_str }}">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="{{ 'detail_label_of_'+'good'+good.id_str }}">
+                                                Note</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            Do you want to update information of this item which named
+                                            <font color="blue">'{{ good.name }}'</font>?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                            </button>
+                                            <a class="btn btn-primary"
+                                               href="{{ url_for('goods.update_one_good',id=good.id_str) }}">Yes</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </td>
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                    data-target="{{ '#delete_of_good'+good.id_str }}">
+                                delete
+                            </button>
+                            <div class="modal fade" id="{{ 'delete_of_good'+good.id_str }}" tabindex="-1" role="dialog"
+                                 aria-labelledby="{{ '#delete_label_of_good'+good.id_str }}">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="{{ 'delete_label_of_good'+good.id_str }}">
+                                                <font color="red">Warning</font></h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            Do you want to detele this item which named <font
+                                                color="red">{{ good.name }}</font>?<br>
+                                            Caution that the item you choose to delete, can not be recovered.
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                            </button>
+                                            <a class="btn btn-danger"
+                                               href="{{ url_for('goods.delete_one_good',id=good.id_str) }}">Yes</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <button class="btn btn-primary col-md-3 col-md-offset-9">Purchase</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
 {% endblock %}

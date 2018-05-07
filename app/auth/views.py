@@ -9,6 +9,7 @@ from .forms import LoginForm, RegistrationForm, ChangePasswordForm,\
     PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm, \
     ChangeUserInfo
 
+
 # the diff between func 'before_app_request'  and func 'before_request':
 # -> func 'before_app_request' s executed before each request, even if outside 
 #    of a blueprint.
@@ -21,7 +22,9 @@ def before_request():
         if not current_user.confirmed \
                 and request.endpoint \
                 and request.endpoint[:5] != 'auth.' \
-                and request.endpoint != 'static':
+                and request.endpoint != 'static' \
+                and request.endpoint != 'bootstrap.static':
+            print(request.endpoint)
             return redirect(url_for('auth.unconfirmed'))
 
 

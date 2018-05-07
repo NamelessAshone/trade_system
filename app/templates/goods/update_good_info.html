@@ -1,10 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "goods/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
-</body>
-</html>
+{% block title %}{{ super() }} - Update one good{% endblock %}
+
+{% block main_div_content %}
+    {# TODO : add a search button #}
+    {{ super() }}
+    <h1 class="page-header">Update a item</h1>
+    <div class="col-md-4">
+        <form class="form" method="post" role="form" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            {{ wtf.form_errors(form, hiddens="only") }}
+
+            {{ wtf.form_field(form.name, value=good.name) }}
+            {{ wtf.form_field(form.text, value=good.text) }}
+            {{ wtf.form_field(form.amount, value=good.amount) }}
+            {{ wtf.form_field(form.price, value=good.price) }}
+            {{ wtf.form_field(form.photo) }}
+            {{ wtf.form_field(form.submit) }}
+        </form>
+    </div>
+{% endblock %}

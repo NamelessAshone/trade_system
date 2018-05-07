@@ -25,5 +25,14 @@
             <h4>Label</h4>
             <span class="text-muted">Something else</span>
         </div>
+        (# {% for good in show_goods %}
+            <div class="col-md-3">
+            <img src="{#{ url_for('goods.',good) }#}" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+            <h4>{{ good.name }}</h4>
+            <span class="text-muted">{{ good.text }}</span>
+        </div>
+        {% endfor %} #}
     </div>
+    {{ pagination.links }}
+    {{ pagination.info }}
 {% endblock %}

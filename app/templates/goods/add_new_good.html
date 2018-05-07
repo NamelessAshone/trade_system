@@ -5,13 +5,9 @@
 
 {% block main_div_content %}
     {# TODO : add a search button #}
+    {{ super() }}
     <h1 class="page-header">Add a new item</h1>
     <div class="col-md-4">
         {{ wtf.quick_form(form) }}
     </div>
-    {% if file_url %}
-        <div class="col-md-4">
-            <br><img src="{{ file_url }}">
-        </div>
-    {% endif %}
 {% endblock %}
