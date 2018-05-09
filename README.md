@@ -1,4 +1,4 @@
-Flasky
+Trade System
 ======
 
 This is a website of Trade System(I think this name stypid too) powered by Flask and Bootstrap.
