@@ -2,6 +2,7 @@ from datetime import datetime
 import hashlib
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
+import flask_whooshalchemyplus
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app, request
 from flask_login import UserMixin, AnonymousUserMixin
@@ -192,11 +193,14 @@ class User(UserMixin, db.Model):
 
 class Good(db.Model):
     __tablename__ = 'goods'
+    __searchable__ = ['name', 'text']
+    # __analyzer__ = SimpleAnalyzer()
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True)
     price = db.Column(db.Float)
     amount = db.Column(db.Integer)
-    text = db.Column(db.String(200))
+    text = db.Column(db.Text)
     photo_path = db.Column(db.String(200))
     photo_url = db.Column(db.String(200))
     upload_date = db.Column(db.DateTime, default=datetime.utcnow)

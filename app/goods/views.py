@@ -6,10 +6,12 @@ from .forms import InputGoodInfo, UpdateGoodInfo, SearchItems
 from . import goods
 from .. import photos, db
 from ..models import Good, User
+import flask_whooshalchemyplus
 import os
 
 
 @goods.route('/home', methods=['GET', 'POST'])
+@login_required
 def home():
     # first = Good.query.order_by(Good.id).first()
     # print(first)
@@ -17,34 +19,37 @@ def home():
         page = int(request.args.get('page', 1))
     except ValueError:
         page = 1
-    per_page = 6
+    per_page = 2
     form = SearchItems()
-    search = False
     offset = (page - 1) * per_page
 
     if form.validate_on_submit():
-        search = True
+        flask_whooshalchemyplus.index_all(current_app)
+
         key = form.search.data
-        show_goods = Good.query.filter(or_(Good.name.like(key),
-                                           Good.text.like(key)))\
+        show_goods = Good.query.whoosh_search(key, or_=True)\
             .limit(per_page).offset(offset)
-        #total = len(Good.query.filter(or_(Good.name.like(key),
-        #                                  Good.text.like(key))).all())
-        total = show_goods.count()
-        print(total)
-        print(Good.query.filter(or_(Good.name.like(key),
-                                          Good.text.like(key))).all())
+        total = Good.query.whoosh_search(key, or_=True).count()
+        pagination = Pagination(page=page,
+                                total=total,
+                                per_page=per_page,
+                                search=True,
+                                found=total,
+                                record_name='goods',
+                                css_framework='bootstrap3')
+
     else:
         total = len(Good.query.all())
         show_goods = Good.query.limit(per_page).offset(offset)
+        pagination = Pagination(page=page,
+                                total=total,
+                                per_page=per_page,
+                                search=False,
+                                record_name='goods',
+                                css_framework='bootstrap3')
     # page = request.args.get(get_page_parameter(), type=int, default=1)
-    print(total)
-    pagination = Pagination(page=page,
-                            total=total,
-                            per_page=per_page,
-                            search=search,
-                            record_name='goods',
-                            css_framework='bootstrap3')
+    # print(total)
+
     # print(pagination.links)
     return render_template('goods/home.html',
                            form=form,
@@ -155,3 +160,21 @@ def delete_one_good(id):
     flash('Success to delete item '
           'with the id "{}" and the name "{}".'.format(delete_id, delete_name))
     return redirect(url_for('goods.show_my_goods'))
+
+'''
+ # TODO : add statistics
+@goods.route('/statistics')
+@login_required
+# @admin_required
+def show_statistics():
+    #do satistics on prices of goods
+    MAX_PRICE = current_app.config['GOOD_MAX_PRICE']
+    delta = 100
+    result = 'satistics'
+    price = []
+    for upper in range(delta, MAX_PRICE, delta):
+        lower = upper - delta
+        price[range.index] = Good.query.filter_by(Good.price >= lower and Good.price <= upper).all()
+    #print(price)
+    return render_template('goods/statistics.html', result)
+'''

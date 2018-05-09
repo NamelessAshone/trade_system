@@ -22,6 +22,9 @@ class Config:
     UPLOADED_PHOTOS_DEST = os.path.join(os.path.dirname(__file__),'app','static')
     WORK_PATH = os.path.dirname(__file__)
 
+    # settings of models
+    GOOD_MAX_PRICE = 10000
+    GOOD_MAX_AMOUNT = 10000
     '''
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
@@ -45,18 +48,19 @@ class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
+    WHOOSH_BASE = SQLALCHEMY_DATABASE_URI
 
 
 class TestingConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data-test.sqlite')
-
+    WHOOSH_BASE = SQLALCHEMY_DATABASE_URI
 
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data.sqlite')
-
+    WHOOSH_BASE = SQLALCHEMY_DATABASE_URI
 
 config = {
     'development': DevelopmentConfig,

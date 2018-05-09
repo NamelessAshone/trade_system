@@ -7,6 +7,8 @@ from flask_login import LoginManager
 from flask_uploads import UploadSet, configure_uploads, \
     IMAGES, patch_request_class
 from config import config
+import flask_whooshalchemyplus
+
 
 bootstrap = Bootstrap()
 mail = Mail()
@@ -29,6 +31,7 @@ def create_app(config_name):
     moment.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
+    flask_whooshalchemyplus.init_app(app)
     configure_uploads(app, photos)
     patch_request_class(app)  # set maximum file size, default is 16MB
     # print(app.config['UPLOADED_FILES_DEST'])
