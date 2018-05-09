@@ -22,3 +22,10 @@ class InputGoodInfo(FlaskForm):
 
 class UpdateGoodInfo(InputGoodInfo):
     submit = SubmitField('Update')
+
+
+class SearchItems(FlaskForm):
+    search = StringField(
+        description="Search items",
+        validators=[DataRequired(), Length(min=1, max=50)])
+    submit = SubmitField('Search')

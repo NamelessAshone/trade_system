@@ -1,38 +1,39 @@
 {% extends "goods/base.html" %}
 
 {% block main_div_content %}
+    {{ super() }}
     {# TODO : add a search button #}
-    <h1 class="page-header">Dashboard</h1>
-
+    <h2 class="page-header">ALL items upload by users</h2>
+    <form class="form" method="post" role="form">
+        <!--div class="input-group stylish-input-group"-->
+        {{ form.hidden_tag() }}
+        <div class="row">
+            <div class="col-md-10">
+                {{ form.search(placeholder="Search items by key words", class_="form-control") }}
+            </div>
+            <div class="col-md-2">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </div>
+        <!--button type="submit">
+            <span class="glyphicon glyphicon-search"></span>
+        </button-->
+    </form>
+    <div class="">{{ pagination.info | safe }}</div>
     <div class="row placeholders">
-        <div class="col-md-3 placeholder">
-            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-            <h4>Label</h4>
-            <span class="text-muted">Something else</span>
-        </div>
-        <div class="col-md-3 placeholder">
-            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-            <h4>Label</h4>
-            <span class="text-muted">Something else</span>
-        </div>
-        <div class="col-md-3 placeholder">
-            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-            <h4>Label</h4>
-            <span class="text-muted">Something else</span>
-        </div>
-        <div class="col-md-3 placeholder">
-            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-            <h4>Label</h4>
-            <span class="text-muted">Something else</span>
-        </div>
-        (# {% for good in show_goods %}
+        {#% set page = request.args.page | default(1) %#}
+        {% for good in show_goods %}
             <div class="col-md-3">
-            <img src="{#{ url_for('goods.',good) }#}" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-            <h4>{{ good.name }}</h4>
-            <span class="text-muted">{{ good.text }}</span>
-        </div>
-        {% endfor %} #}
+                <div class="thumbnail" style="height: 200px">
+                    <img src="{{ good.photo_url }}" class="img-responsive"
+                         alt="Generic placeholder thumbnail" style="height: 70%">
+                    <div style="height: 20%">
+                        <h4>{{ good.name }}</h4>
+                        <span class="text-muted">{{ good.text }}</span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
-    {{ pagination.links }}
-    {{ pagination.info }}
+    {{ pagination.links | safe }}
 {% endblock %}

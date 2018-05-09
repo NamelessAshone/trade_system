@@ -23,14 +23,8 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="{% if current_user.is_authenticated %}
-                                    {{ url_for('goods.home') }}
-                                 {% else %}
-                                    {{ url_for('main.index') }}
-                                 {% endif %}">Home</a>
-                    </li>
                     {% if current_user.is_authenticated %}
-                        <li><a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a></li>
+                    <li><a href="{{ url_for('goods.home') }}">Home</a></li>
                     {% endif %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -41,6 +35,7 @@
                                 {{ current_user.username }} <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
+                                <li><a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a></li>
                                 <li><a href="{{ url_for('auth.change_password') }}">Change Password</a></li>
                                 <li><a href="{{ url_for('auth.change_email_request') }}">Change Email</a></li>
                                 <li><a href="{{ url_for('auth.change_user_info') }}">Change my information</a></li>
@@ -57,7 +52,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container" style="margin-top: 70px">
+    <div class="container" style="margin-top: 70px; margin-bottom: 0%; height: 100%">
         {% block page_content %}
             {% block main_div_content %}
                 {% for message in get_flashed_messages() %}

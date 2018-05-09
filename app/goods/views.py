@@ -1,22 +1,57 @@
 from flask import render_template, redirect, url_for, current_app, flash, request
-from flask_paginate import Pagination, get_page_parameter
+from flask_paginate import Pagination#, get_page_parameter
 from flask_login import current_user, login_required
-from .forms import InputGoodInfo, UpdateGoodInfo
+from sqlalchemy import or_
+from .forms import InputGoodInfo, UpdateGoodInfo, SearchItems
 from . import goods
 from .. import photos, db
 from ..models import Good, User
 import os
 
 
-@goods.route('/home', methods=['GET'])
+@goods.route('/home', methods=['GET', 'POST'])
 def home():
-    first = Good.query.order_by(Good.id).first()
-    print(first)
-    show_goods = Good.query.all()
-    page = request.args.get(get_page_parameter(), type=int, default=1)
-    pagination = Pagination(page=page, total=show_goods.count(show_goods), css_framework='bootstrap',
-                            record_name='goods')
-    return render_template('goods/home.html', show_goods=show_goods, pagination=pagination)
+    # first = Good.query.order_by(Good.id).first()
+    # print(first)
+    try:
+        page = int(request.args.get('page', 1))
+    except ValueError:
+        page = 1
+    per_page = 6
+    form = SearchItems()
+    search = False
+    offset = (page - 1) * per_page
+
+    if form.validate_on_submit():
+        search = True
+        key = form.search.data
+        show_goods = Good.query.filter(or_(Good.name.like(key),
+                                           Good.text.like(key)))\
+            .limit(per_page).offset(offset)
+        #total = len(Good.query.filter(or_(Good.name.like(key),
+        #                                  Good.text.like(key))).all())
+        total = show_goods.count()
+        print(total)
+        print(Good.query.filter(or_(Good.name.like(key),
+                                          Good.text.like(key))).all())
+    else:
+        total = len(Good.query.all())
+        show_goods = Good.query.limit(per_page).offset(offset)
+    # page = request.args.get(get_page_parameter(), type=int, default=1)
+    print(total)
+    pagination = Pagination(page=page,
+                            total=total,
+                            per_page=per_page,
+                            search=search,
+                            record_name='goods',
+                            css_framework='bootstrap3')
+    # print(pagination.links)
+    return render_template('goods/home.html',
+                           form=form,
+                           page=page,
+                           per_page=per_page,
+                           show_goods=show_goods,
+                           pagination=pagination)
 
 
 @goods.route('/<id>')
@@ -29,7 +64,10 @@ def show(id):
     is_owner = False
     if current_user.id == good.owner.id:
         is_owner = True
-    return render_template('goods/show_one_good.html', good=good, current_url=current_url, is_owner=is_owner)
+    return render_template('goods/show_one_good.html',
+                           good=good,
+                           current_url=current_url,
+                           is_owner=is_owner)
 
 
 @goods.route('/show-my-goods')
@@ -114,5 +152,6 @@ def delete_one_good(id):
     good.del_photo()
     db.session.delete(good)
     db.session.commit()
-    flash('Success to delete item with the id "{}" and the name "{}".'.format(delete_id, delete_name))
+    flash('Success to delete item '
+          'with the id "{}" and the name "{}".'.format(delete_id, delete_name))
     return redirect(url_for('goods.show_my_goods'))
