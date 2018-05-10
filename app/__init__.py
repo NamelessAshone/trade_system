@@ -45,4 +45,8 @@ def create_app(config_name):
     from .goods import goods as goods_blueprint
     app.register_blueprint(goods_blueprint, url_prefix='/goods')
 
+    from .ck import ck as ck_blueprint
+    app.register_blueprint(ck_blueprint, url_prefix='/ck')
+    app.jinja_env.add_extension("chartkick.ext.charts")
+
     return app

@@ -1,10 +1,46 @@
 {% extends "goods/base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
+{% block head %}
+    {{ super() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='chartkick.js') }}"></script>
+{% endblock %}
 {% block title %}{{ super() }} - Add new good{% endblock %}
 
 {% block main_div_content %}
     {# TODO : add a search button #}
     {{ super() }}
     <h2 class="page-header">Statistic</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <font color="white">Price</font>
+                    <span class="pull-right">
+                        <font color="white">total: {{ result.price_total }}</font>
+                    </span>
+                </div>
+                <div class="panel-body">
+                    {% for key,value in result.price.items() %}
+                        {% set percent = ((value / result.price_total) * 100) | round %}
+                        <h5>
+                            {{ key | title }}
+                            <span class="text-muted">({{ value }})</span>
+                        </h5>
+                        <div class="progress progress-striped active">
+                            <div class="progress-bar" role="progressbar"
+                                 aria-valuenow="{{ percent }}" aria-valuemin="0"
+                                 aria-valuemax="100" style="width: {{ percent }}%;">
+                                {{ percent }}%
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+             {% pie_chart dict(result.price) %}
+        </div>
+    </div>
 {% endblock %}

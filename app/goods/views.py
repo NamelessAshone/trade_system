@@ -1,11 +1,12 @@
 from flask import render_template, redirect, url_for, current_app, flash, request
 from flask_paginate import Pagination#, get_page_parameter
 from flask_login import current_user, login_required
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 from .forms import InputGoodInfo, UpdateGoodInfo, SearchItems
 from . import goods
 from .. import photos, db
 from ..models import Good, User
+from collections import OrderedDict
 import flask_whooshalchemyplus
 import os
 
@@ -161,20 +162,27 @@ def delete_one_good(id):
           'with the id "{}" and the name "{}".'.format(delete_id, delete_name))
     return redirect(url_for('goods.show_my_goods'))
 
-'''
- # TODO : add statistics
+
+# TODO : add statistics
 @goods.route('/statistics')
 @login_required
 # @admin_required
 def show_statistics():
     #do satistics on prices of goods
     MAX_PRICE = current_app.config['GOOD_MAX_PRICE']
-    delta = 100
-    result = 'satistics'
-    price = []
+    delta = 1000
+
+    class Result():
+        price = OrderedDict()
+        price_total = 0
+
+    result = Result()
+    result.price_total = Good.query.count()
     for upper in range(delta, MAX_PRICE, delta):
         lower = upper - delta
-        price[range.index] = Good.query.filter_by(Good.price >= lower and Good.price <= upper).all()
-    #print(price)
-    return render_template('goods/statistics.html', result)
-'''
+        goods = Good.query.filter(and_(Good.price >= lower, Good.price <= upper)).all()
+        interval = str(lower) + ' < price < '+ str(upper)
+        result.price[interval] = len(goods)
+    data = {'Chrome': 52.9, 'Opera': 1.6, 'Firefox': 27.7}
+    print(result.price, '\n', result.price_total)
+    return render_template('goods/statistics.html', result=result)
