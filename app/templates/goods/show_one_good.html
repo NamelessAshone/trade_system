@@ -1,6 +1,7 @@
 {% extends "goods/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}{{ super() }} - Add new good{% endblock %}
+{% block title %}{{ super() }} - Show one good{% endblock %}
 
 {% block main_div_content %}
     {{ super() }}
@@ -59,7 +60,7 @@
                                     </div>
                                 </div>
                             </div>
-                            </td>
+
                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                     data-target="{{ '#delete_of_good'+good.id_str }}">
                                 delete
@@ -89,7 +90,38 @@
                                 </div>
                             </div>
                         {% else %}
-                            <button class="btn btn-primary col-md-3 col-md-offset-9">Purchase</button>
+                            <button class="btn btn-primary btn-sm col-md-3 col-md-offset-9" data-toggle="modal"
+                                    data-target="{{ '#purchase_good'+good.id_str }}">Purchase</button>
+                            <div class="modal fade" id="{{ 'purchase_good'+good.id_str }}" tabindex="-1" role="dialog"
+                                 aria-labelledby="{{ '#purchase_label_of_good'+good.id_str }}">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="{{ 'purchase_label_of_good'+good.id_str }}">
+                                                <font color="red">Note</font></h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            Do you want to purchase this item which named
+                                            <font color="red">{{ good.name }}</font>?
+                                            <br>
+                                            <form class="form" method="post" role="form" enctype="multipart/form-data">
+                                                {{ form.hidden_tag() }}
+                                                {{ wtf.form_errors(form, hiddens="only") }}
+                                                {% if last_value != None %}
+                                                    {{ wtf.form_field(form.amount, value=last_value.amout) }}
+                                                    {{ wtf.form_field(form.address, value=last_value.address) }}
+                                                {% else %}
+                                                    {{ wtf.form_field(form.amount) }}
+                                                    {{ wtf.form_field(form.address) }}
+                                                {% endif %}
+                                                {{ wtf.form_field(form.submit) }}
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         {% endif %}
                     </div>
                 </div>

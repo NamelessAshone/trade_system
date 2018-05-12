@@ -1,0 +1,75 @@
+{% extends "goods/base.html" %}
+
+{% block title %}{{ super() }} - Show my received orders{% endblock %}
+
+{% block main_div_content %}
+    {{ super() }}
+    <h2 class="page-header">My received orders</h2>
+    <table class="table table-hover table-condensed">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Id</th>
+            <th>Owner_id</th>
+            <th>Buyer_id</th>
+            <th>Good_id</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Total_price</th>
+            <th>Address</th>
+            <th>Cofirmed</th>
+            <th>Reject</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for log in logs %}
+            <tr>
+                <th scope="row">{{ loop.index }}</th>
+                <td>{{ log.id }}</td>
+                <td>{{ log.owner_id }}</td>
+                <td>{{ log.buyer_id }}</td>
+                <td>{{ log.good_id }}</td>
+                <td>{{ log.date }}</td>
+                <td>{{ log.amount }}</td>
+                <td>{{ log.total_price }}</td>
+                <td>{{ log.address }}</td>
+                <td>{% if log.confirmed == True %}
+                        <span class="glyphicon glyphicon-ok"></span>
+                    {% else %}
+                        <a type="button" class="btn btn-success btn-sm" href="{{ url_for('goods.confirm_order', id=log.id) }}">confirm</a>
+                    {% endif %}
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm"
+                            {% if log.confirmed == True %}disabled="disabled"{% endif %}
+                            data-toggle="modal" data-target="{{ '#reject_of_log' + str(log.id) }}">
+                        reject
+                    </button>
+                    <div class="modal fade" id="{{ 'reject_of_log' + str(log.id) }}"
+                         tabindex="-1" role="dialog" aria-labelledby="{{ '#reject_label_of_log' + str(log.id) }}">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                            aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="{{ 'reject_label_of_log' + str(log.id) }}"><font color="red">Warning</font></h4>
+                                </div>
+                                <div class="modal-body">
+                                    Do you want to reject this order with id <font color="red">{{ log.id }}</font>?<br>
+                                    The items that the buyer ordered will be return to you!
+                                    Caution that the log you choose to reject which will be deleted and can not be recovered.
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <a class="btn btn-danger" href="{{ url_for('goods.reject_order',id=str(log.id)) }}">Yes</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

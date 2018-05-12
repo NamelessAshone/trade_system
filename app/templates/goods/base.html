@@ -15,7 +15,8 @@
                 </li>
                 <li><a href="{{ url_for('goods.add_new_good') }}">上架新商品</a></li>
                 <li><a href="{{ url_for('goods.show_my_goods') }}">我上架的商品</a></li>
-                <li><a href="#">我收到的订单</a></li>
+                <li><a href="{{ url_for('goods.show_my_received_orders') }}">我收到的订单</a></li>
+                <li><a href="{{ url_for('goods.show_my_requested_orders') }}">我发起的订单</a></li>
                 <li><a href="{{ url_for('goods.show_statistics') }}">统计</a></li>
             </ul>
         </div>

@@ -25,7 +25,13 @@ class UpdateGoodInfo(InputGoodInfo):
 
 
 class SearchItems(FlaskForm):
-    search = StringField(
-        description="Search items",
-        validators=[DataRequired(), Length(min=1, max=50)])
+    search = StringField(description="Search items", validators=[
+        DataRequired(), Length(min=1, max=50)])
     submit = SubmitField('Search')
+
+
+class PurchaseItems(FlaskForm):
+    amount = IntegerField('Amount', validators=[
+        DataRequired(), NumberRange(1, 100000, 'The price must be between 1 and 10000')])
+    address = TextAreaField('Your address')
+    submit = SubmitField('Commit')

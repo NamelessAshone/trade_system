@@ -221,6 +221,20 @@ class Good(db.Model):
         print('success remove {}'.format(self.photo_path))
 
 
+class Purchase_log(db.Model):
+    __tablename__ = 'purchase_logs'
+
+    id = db.Column(db.Integer, primary_key=True)
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    buyer_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    good_id = db.Column(db.Integer, db.ForeignKey('goods.id'))
+    date = db.Column(db.DateTime, default=datetime.utcnow())
+    amount = db.Column(db.Integer)
+    total_price = db.Column(db.Float)
+    address = db.Column(db.Text)
+    confirmed = db.Column(db.Boolean, default=False)
+
+
 class AnonymousUser(AnonymousUserMixin):
     def can(self, permissions):
         return False

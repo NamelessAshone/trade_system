@@ -1,5 +1,7 @@
 {% extends "goods/base.html" %}
 
+{% block title %}{{ super() }} - Home{% endblock %}
+
 {% block main_div_content %}
     {{ super() }}
     {# TODO : add a search button #}
@@ -23,7 +25,7 @@
     <div class="row placeholders">
         {#% set page = request.args.page | default(1) %#}
         {% for good in show_goods %}
-            <div class="col-md-3">
+            <div class="col-md-3" onclick="window.open('{{ url_for('goods.show', id=good.id) }}')">
                 <div class="thumbnail" style="height: 200px">
                     <img src="{{ good.photo_url }}" class="img-responsive img-thumbnail"
                          alt="Generic placeholder thumbnail" style="height: 70%">
